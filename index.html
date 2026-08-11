@@ -26,14 +26,12 @@
       --teal: #278F96;
       --purple: #472D7C;
       --white: #ffffff;
-      --glass: rgba(255,255,255,.12);
-      --glass-strong: rgba(255,255,255,.18);
-      --line: rgba(255,255,255,.26);
+      --line: rgba(255,255,255,.28);
       --shadow: 0 30px 80px rgba(31, 20, 66, .30);
     }
 
     * { box-sizing: border-box; }
-    html { min-height: 100%; }
+    html, body { min-height: 100%; }
 
     body {
       min-height: 100vh;
@@ -54,8 +52,8 @@
       position: fixed;
       border-radius: 50%;
       pointer-events: none;
-      filter: blur(1px);
       opacity: .35;
+      z-index: 0;
     }
 
     body::before {
@@ -89,7 +87,7 @@
     .hero {
       width: 100%;
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      grid-template-columns: minmax(340px, .96fr) minmax(0, 1.04fr);
       align-items: center;
       gap: clamp(26px, 5vw, 62px);
       padding: clamp(18px, 3vw, 30px);
@@ -111,9 +109,13 @@
       pointer-events: none;
     }
 
-    .copy {
+    .copy,
+    .visual {
       position: relative;
       z-index: 1;
+    }
+
+    .copy {
       padding: clamp(8px, 2vw, 22px);
       text-align: right;
     }
@@ -127,16 +129,14 @@
       background: rgba(71,45,124,.26);
       font-size: clamp(13px, 1.6vw, 16px);
       font-weight: 700;
-      letter-spacing: .1px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
     }
 
     h1 {
       margin: 0;
       font-size: clamp(38px, 6vw, 68px);
-      line-height: 1.22;
+      line-height: 1.18;
       font-weight: 900;
-      text-wrap: balance;
       text-shadow: 0 8px 28px rgba(31,20,66,.22);
     }
 
@@ -197,14 +197,19 @@
     }
 
     .visual {
-      position: relative;
-      z-index: 1;
-      padding: clamp(6px, 1.4vw, 12px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      min-width: 0;
     }
 
     .cover-wrap {
-      position: relative;
+      width: min(100%, 520px);
+      aspect-ratio: 16 / 9;
       margin: 0;
+      padding: clamp(8px, 1.2vw, 12px);
       border-radius: clamp(20px, 3vw, 30px);
       overflow: hidden;
       border: 1px solid rgba(255,255,255,.42);
@@ -217,19 +222,22 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(125deg, rgba(255,255,255,.20), transparent 26%, transparent 70%, rgba(71,45,124,.16));
+      background: linear-gradient(125deg, rgba(255,255,255,.16), transparent 26%, transparent 70%, rgba(71,45,124,.14));
       pointer-events: none;
     }
 
     .cover-wrap img {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
+      height: 100%;
+      border-radius: clamp(14px, 2vw, 22px);
+      object-fit: contain;
+      object-position: center;
+      background: rgba(255,255,255,.10);
     }
 
     .mini-note {
-      margin: 15px 4px 0;
+      margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -247,30 +255,30 @@
       stroke-width: 1.9;
     }
 
-    @media (max-width: 860px) {
-      .page { width: min(100% - 22px, 720px); padding-block: 18px; }
-      .hero { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+    @media (max-width: 920px) {
+      .page { width: min(100% - 22px, 820px); padding-block: 18px; }
+      .hero { grid-template-columns: 1fr; gap: 18px; padding: 18px; }
       .visual { order: -1; }
       .copy { text-align: center; padding-top: 6px; }
-      .badge { margin-inline: auto; }
-      .desc { margin-inline: auto; }
+      .badge, .desc { margin-inline: auto; }
       .open-btn { width: 100%; }
-      .cover-wrap { transform: none; }
+      .cover-wrap { transform: none; width: min(100%, 620px); }
     }
 
     @media (max-width: 480px) {
       .page { width: calc(100% - 16px); padding-block: 8px; }
-      .hero { border-radius: 24px; padding: 10px; }
+      .hero { border-radius: 24px; padding: 12px; }
       .copy { padding: 8px 8px 14px; }
       .badge { margin-bottom: 12px; }
       .subtitle { margin-top: 10px; }
       .desc { margin-bottom: 18px; line-height: 1.75; }
       .open-btn { min-height: 56px; border-radius: 16px; }
-      .cover-wrap { border-radius: 18px; }
+      .cover-wrap { border-radius: 18px; padding: 8px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .open-btn { transition: none; }
+      .cover-wrap { transform: none; }
     }
   </style>
 </head>
