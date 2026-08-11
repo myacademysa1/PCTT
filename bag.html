@@ -4,14 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#472D7C">
-  <title>عرض وتحميل روزنامة معسكر الموظف الشامل</title>
+  <title>استعراض روزنامة معسكر الموظف الشامل</title>
 
   <style>
     :root {
-      --c1: #64B687;
-      --c2: #49A28F;
-      --c3: #278F96;
-      --c4: #472D7C;
+      --green: #64B687;
+      --mint: #49A28F;
+      --teal: #278F96;
+      --purple: #472D7C;
+      --white: #ffffff;
+      --panel: rgba(255,255,255,.12);
+      --line: rgba(255,255,255,.28);
+      --shadow: 0 18px 48px rgba(31,20,66,.26);
     }
 
     * { box-sizing: border-box; }
@@ -28,22 +32,28 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      font-family: Tahoma, Arial, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, var(--c1), var(--c2), var(--c3), var(--c4));
-      color: var(--c4);
+      font-family: "Cairo", "Tajawal", Tahoma, Arial, "Segoe UI", sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 8% 5%, rgba(255,255,255,.18), transparent 24%),
+        linear-gradient(115deg, var(--green) 0%, var(--mint) 29%, var(--teal) 58%, var(--purple) 100%);
     }
 
-    header {
+    .topbar {
       flex: 0 0 auto;
-      display: flex;
+      position: relative;
+      z-index: 20;
+      min-height: 82px;
+      padding: 12px clamp(14px, 3vw, 34px);
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px clamp(12px, 3vw, 26px);
-      border-bottom: 3px solid var(--c4);
-      background: linear-gradient(105deg, var(--c1) 0%, var(--c2) 38%, var(--c3) 72%, var(--c4) 100%);
-      box-shadow: 0 8px 22px rgba(71, 45, 124, 0.26);
-      z-index: 10;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(105deg, rgba(100,182,135,.80), rgba(39,143,150,.82) 58%, rgba(71,45,124,.90));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
     .title-wrap {
@@ -53,66 +63,76 @@
 
     .title {
       margin: 0;
-      font-size: clamp(16px, 2.4vw, 21px);
-      font-weight: 800;
-      line-height: 1.5;
-      color: var(--c4);
+      font-size: clamp(17px, 2.2vw, 23px);
+      line-height: 1.45;
+      font-weight: 900;
+      color: var(--white);
+      text-shadow: 0 5px 18px rgba(31,20,66,.18);
     }
 
-    .file-name {
-      margin: 2px 0 0;
-      direction: ltr;
-      text-align: right;
-      font-size: clamp(11px, 1.8vw, 13px);
-      font-weight: 700;
-      color: var(--c4);
-      overflow-wrap: anywhere;
+    .subtitle {
+      margin: 3px 0 0;
+      font-size: clamp(11px, 1.5vw, 13px);
+      font-weight: 600;
+      color: rgba(255,255,255,.76);
     }
 
-    .actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .action-btn {
-      min-height: 44px;
+    .download-btn {
+      min-height: 50px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      padding: 9px 13px;
-      border: 2px solid var(--c4);
-      border-radius: 12px;
+      gap: 9px;
+      padding: 11px 17px;
+      border: 1px solid rgba(255,255,255,.50);
+      border-radius: 16px;
+      color: var(--white);
       text-decoration: none;
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 900;
       white-space: nowrap;
-      color: var(--c1);
-      background: linear-gradient(110deg, var(--c3), var(--c4));
+      background: linear-gradient(110deg, rgba(255,255,255,.20), rgba(71,45,124,.44));
+      box-shadow: 0 10px 26px rgba(31,20,66,.20), inset 0 1px 0 rgba(255,255,255,.25);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
       -webkit-tap-highlight-color: transparent;
     }
 
-    .action-btn.secondary {
-      color: var(--c4);
-      background: linear-gradient(110deg, var(--c1), var(--c2));
+    .download-btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(110deg, rgba(255,255,255,.28), rgba(71,45,124,.58));
+      box-shadow: 0 14px 30px rgba(31,20,66,.26), inset 0 1px 0 rgba(255,255,255,.28);
     }
 
-    .action-btn svg {
-      width: 19px;
-      height: 19px;
-      flex: 0 0 19px;
-      fill: currentColor;
+    .download-btn:active { transform: translateY(0); }
+    .download-btn:focus-visible { outline: 3px solid rgba(255,255,255,.80); outline-offset: 3px; }
+
+    .download-btn svg {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .viewer {
+    .viewer-shell {
       position: relative;
       flex: 1 1 auto;
-      width: 100%;
       min-height: 0;
-      background: var(--c1);
+      padding: clamp(8px, 1.5vw, 15px);
+    }
+
+    .viewer-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.36);
+      border-radius: clamp(16px, 2vw, 24px);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 22px 54px rgba(31,20,66,.28);
     }
 
     iframe {
@@ -120,91 +140,147 @@
       width: 100%;
       height: 100%;
       border: 0;
-      background: var(--c1);
+      background: #ffffff;
+    }
+
+    .loading {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(100,182,135,.96), rgba(39,143,150,.96), rgba(71,45,124,.97));
+      color: var(--white);
+      z-index: 3;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-box {
+      display: grid;
+      justify-items: center;
+      gap: 13px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,.28);
+      border-top-color: var(--white);
+      animation: spin .75s linear infinite;
+    }
+
+    .loader-text {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      color: rgba(255,255,255,.92);
     }
 
     .fallback {
       position: absolute;
-      inset: auto 12px 12px 12px;
-      z-index: 2;
+      inset: auto 14px 14px 14px;
+      z-index: 4;
       display: none;
-      padding: 10px 12px;
-      border: 2px solid var(--c4);
-      border-radius: 12px;
-      background: var(--c2);
-      color: var(--c4);
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,.46);
+      border-radius: 14px;
+      background: rgba(71,45,124,.92);
+      color: var(--white);
       text-align: center;
+      font-size: 13px;
       font-weight: 700;
+      box-shadow: 0 12px 28px rgba(31,20,66,.22);
     }
 
-    @media (max-width: 720px) {
-      header {
-        align-items: stretch;
-        flex-direction: column;
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 680px) {
+      .topbar {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 10px;
         padding: 10px 12px;
       }
 
       .title-wrap { text-align: center; }
-      .file-name { text-align: center; }
-      .actions { width: 100%; }
-      .action-btn { flex: 1 1 150px; }
+      .download-btn { width: 100%; min-height: 48px; border-radius: 14px; }
+      .viewer-shell { padding: 7px; }
+      .viewer-card { border-radius: 15px; }
     }
 
     @media (max-width: 390px) {
-      .action-btn { font-size: 13px; padding-inline: 9px; }
-      .file-name { font-size: 11px; }
+      .title { font-size: 16px; }
+      .subtitle { font-size: 11px; }
+      .download-btn { font-size: 13px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .download-btn { transition: none; }
+      .spinner { animation: none; }
+      .loading { transition: none; }
     }
   </style>
 </head>
 <body>
-  <header>
+  <header class="topbar">
     <div class="title-wrap">
       <h1 class="title">روزنامة معسكر الموظف الشامل</h1>
-      <p class="file-name">PCTT.Training.4th.Cohort.2026.pdf</p>
+      <p class="subtitle">النسخة الأولى · أغسطس 2026م</p>
     </div>
 
-    <nav class="actions" aria-label="خيارات الملف">
-      <a id="directOpen" class="action-btn secondary" href="PCTT.Training.4th.Cohort.2026.pdf" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H5v12h12v-6h2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg>
-        <span>فتح PDF</span>
-      </a>
-
-      <a class="action-btn" href="PCTT.Training.4th.Cohort.2026.pdf" download="PCTT.Training.4th.Cohort.2026.pdf">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2ZM19 9h-4V3H9v6H5l7 7 7-7Z"/></svg>
-        <span>تحميل الملف</span>
-      </a>
-    </nav>
+    <a class="download-btn" href="PCTT.Training.4th.Cohort.2026.pdf" download="PCTT.Training.4th.Cohort.2026.pdf" aria-label="تحميل روزنامة معسكر الموظف الشامل">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3v12"/>
+        <path d="m7.5 10.5 4.5 4.5 4.5-4.5"/>
+        <path d="M5 20h14"/>
+      </svg>
+      <span>تحميل الروزنامة</span>
+    </a>
   </header>
 
-  <main class="viewer">
-    <iframe id="pdfViewer" title="استعراض ملف روزنامة معسكر الموظف الشامل" allow="fullscreen"></iframe>
-    <div id="fallback" class="fallback">إذا لم يظهر الملف داخل الصفحة، استخدم زر «فتح PDF» بالأعلى.</div>
+  <main class="viewer-shell">
+    <section class="viewer-card" aria-label="عارض الروزنامة">
+      <div id="loading" class="loading" aria-live="polite">
+        <div class="loader-box">
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="loader-text">جارٍ فتح الروزنامة…</p>
+        </div>
+      </div>
+
+      <iframe
+        id="pdfViewer"
+        title="استعراض ملف روزنامة معسكر الموظف الشامل"
+        src="PCTT.Training.4th.Cohort.2026.pdf#view=FitH&toolbar=1&navpanes=0"
+        allow="fullscreen"
+      ></iframe>
+
+      <div id="fallback" class="fallback">
+        إذا لم يظهر الملف داخل الصفحة، يمكنك تحميله من زر «تحميل الروزنامة» بالأعلى.
+      </div>
+    </section>
   </main>
 
   <script>
     (() => {
-      const PDF_FILE = 'PCTT.Training.4th.Cohort.2026.pdf';
-      const iframe = document.getElementById('pdfViewer');
-      const directOpen = document.getElementById('directOpen');
+      const viewer = document.getElementById('pdfViewer');
+      const loading = document.getElementById('loading');
       const fallback = document.getElementById('fallback');
 
-      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
-      const pdfUrl = isHttp ? new URL(PDF_FILE, location.href).href : PDF_FILE;
+      const finishLoading = () => loading.classList.add('hidden');
+      viewer.addEventListener('load', finishLoading, { once: true });
 
-      directOpen.href = pdfUrl;
-
-      if (isHttp) {
-        iframe.src = 'https://docs.google.com/gview?embedded=1&url=' + encodeURIComponent(pdfUrl);
-      } else {
-        iframe.src = PDF_FILE;
-      }
-
-      const showFallback = () => {
+      setTimeout(() => {
+        finishLoading();
         fallback.style.display = 'block';
-      };
-
-      const timer = setTimeout(showFallback, 12000);
-      iframe.addEventListener('load', () => clearTimeout(timer), { once: true });
+      }, 9000);
     })();
   </script>
 </body>

@@ -5,201 +5,301 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#472D7C">
   <meta name="robots" content="index,follow,max-image-preview:large">
-
   <title>روزنامة معسكر الموظف الشامل - النسخة الأولى - أغسطس 2026م</title>
   <meta name="description" content="روزنامة معسكر الموظف الشامل - النسخة الأولى - أغسطس 2026م. فتح واستعراض ملف PDF على الجوال والتابلت والكمبيوتر.">
-  <link rel="canonical" href="https://dapegrar-bit.github.io/.EABA/">
   <link rel="preload" as="image" href="cover.jpg">
 
-  <!-- معاينة الرابط في واتساب وتليجرام ولينكدإن وفيسبوك وغيرها -->
   <meta property="og:locale" content="ar_SA">
   <meta property="og:type" content="website">
   <meta property="og:title" content="روزنامة معسكر الموظف الشامل - النسخة الأولى - أغسطس 2026م">
-  <meta property="og:description" content="روزنامة معسكر الموظف الشامل - فتح واستعراض الملف التدريبي مباشرة من مختلف الأجهزة.">
-  <meta property="og:url" content="https://dapegrar-bit.github.io/.EABA/">
-  <meta property="og:image" content="https://dapegrar-bit.github.io/.EABA/cover.jpg">
-  <meta property="og:image:secure_url" content="https://dapegrar-bit.github.io/.EABA/cover.jpg">
+  <meta property="og:description" content="فتح واستعراض روزنامة معسكر الموظف الشامل مباشرة من مختلف الأجهزة.">
+  <meta property="og:image" content="cover.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="720">
   <meta property="og:image:alt" content="غلاف روزنامة معسكر الموظف الشامل">
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="روزنامة معسكر الموظف الشامل - النسخة الأولى - أغسطس 2026م">
-  <meta name="twitter:description" content="فتح واستعراض روزنامة معسكر الموظف الشامل مباشرة من مختلف الأجهزة.">
-  <meta name="twitter:image" content="https://dapegrar-bit.github.io/.EABA/cover.jpg">
-  <meta name="twitter:image:alt" content="غلاف روزنامة معسكر الموظف الشامل">
-
   <style>
     :root {
-      --c1: #64B687;
-      --c2: #49A28F;
-      --c3: #278F96;
-      --c4: #472D7C;
+      --green: #64B687;
+      --mint: #49A28F;
+      --teal: #278F96;
+      --purple: #472D7C;
+      --white: #ffffff;
+      --glass: rgba(255,255,255,.12);
+      --glass-strong: rgba(255,255,255,.18);
+      --line: rgba(255,255,255,.26);
+      --shadow: 0 30px 80px rgba(31, 20, 66, .30);
     }
 
     * { box-sizing: border-box; }
-
     html { min-height: 100%; }
 
     body {
       min-height: 100vh;
       min-height: 100dvh;
       margin: 0;
-      padding: clamp(16px, 4vw, 44px);
+      font-family: "Cairo", "Tajawal", Tahoma, Arial, "Segoe UI", sans-serif;
+      color: var(--white);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,.20), transparent 26%),
+        radial-gradient(circle at 88% 24%, rgba(255,255,255,.10), transparent 26%),
+        linear-gradient(125deg, var(--green) 0%, var(--mint) 27%, var(--teal) 58%, var(--purple) 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(1px);
+      opacity: .35;
+    }
+
+    body::before {
+      width: 420px;
+      height: 420px;
+      inset: -180px auto auto -140px;
+      border: 1px solid rgba(255,255,255,.26);
+      box-shadow: 0 0 0 70px rgba(255,255,255,.035), 0 0 0 145px rgba(255,255,255,.025);
+    }
+
+    body::after {
+      width: 360px;
+      height: 360px;
+      inset: auto -160px -150px auto;
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 0 0 72px rgba(255,255,255,.035), 0 0 0 145px rgba(255,255,255,.02);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: clamp(22px, 5vw, 64px) 0;
       display: grid;
       place-items: center;
-      font-family: Tahoma, Arial, "Segoe UI", sans-serif;
-      color: var(--c4);
-      background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 34%, var(--c3) 67%, var(--c4) 100%);
+      position: relative;
+      z-index: 1;
     }
 
-    .shell {
-      width: min(100%, 1040px);
-      border: 2px solid var(--c3);
-      border-radius: clamp(20px, 3vw, 34px);
-      overflow: hidden;
-      background: linear-gradient(145deg, var(--c1) 0%, var(--c2) 100%);
-      box-shadow: 0 22px 55px rgba(71, 45, 124, 0.34);
-    }
-
-    .accent {
-      height: 10px;
-      background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3), var(--c4));
-    }
-
-    .content {
+    .hero {
+      width: 100%;
       display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(280px, .92fr);
-      gap: clamp(20px, 4vw, 44px);
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
       align-items: center;
-      padding: clamp(18px, 4vw, 42px);
-    }
-
-    .preview {
-      margin: 0;
-      border-radius: clamp(16px, 2.4vw, 26px);
+      gap: clamp(26px, 5vw, 62px);
+      padding: clamp(18px, 3vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: clamp(26px, 4vw, 42px);
+      background: linear-gradient(140deg, rgba(255,255,255,.17), rgba(255,255,255,.07));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       overflow: hidden;
-      border: 2px solid var(--c4);
-      box-shadow: 0 16px 34px rgba(71, 45, 124, 0.28);
-      background: var(--c3);
+      position: relative;
     }
 
-    .preview img {
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, rgba(255,255,255,.08), transparent 42%, rgba(255,255,255,.04));
+      pointer-events: none;
+    }
+
+    .copy {
+      position: relative;
+      z-index: 1;
+      padding: clamp(8px, 2vw, 22px);
+      text-align: right;
+    }
+
+    .badge {
+      width: fit-content;
+      margin: 0 0 18px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.30);
+      background: rgba(71,45,124,.26);
+      font-size: clamp(13px, 1.6vw, 16px);
+      font-weight: 700;
+      letter-spacing: .1px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: 1.22;
+      font-weight: 900;
+      text-wrap: balance;
+      text-shadow: 0 8px 28px rgba(31,20,66,.22);
+    }
+
+    .subtitle {
+      margin: 14px 0 6px;
+      font-size: clamp(20px, 2.6vw, 28px);
+      font-weight: 700;
+      line-height: 1.55;
+      color: rgba(255,255,255,.96);
+    }
+
+    .desc {
+      margin: 0 0 26px;
+      max-width: 620px;
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.9;
+      color: rgba(255,255,255,.83);
+    }
+
+    .open-btn {
+      min-height: 60px;
+      width: min(100%, 430px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px 22px;
+      border: 1px solid rgba(255,255,255,.48);
+      border-radius: 18px;
+      text-decoration: none;
+      color: var(--white);
+      font-size: clamp(16px, 2vw, 19px);
+      font-weight: 900;
+      background: linear-gradient(105deg, rgba(255,255,255,.18), rgba(71,45,124,.43));
+      box-shadow: 0 14px 34px rgba(31,20,66,.25), inset 0 1px 0 rgba(255,255,255,.25);
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .open-btn:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(105deg, rgba(255,255,255,.26), rgba(71,45,124,.55));
+      box-shadow: 0 18px 40px rgba(31,20,66,.30), inset 0 1px 0 rgba(255,255,255,.30);
+    }
+
+    .open-btn:active { transform: translateY(0); }
+    .open-btn:focus-visible { outline: 3px solid rgba(255,255,255,.78); outline-offset: 4px; }
+
+    .open-btn svg {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 26px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .visual {
+      position: relative;
+      z-index: 1;
+      padding: clamp(6px, 1.4vw, 12px);
+    }
+
+    .cover-wrap {
+      position: relative;
+      margin: 0;
+      border-radius: clamp(20px, 3vw, 30px);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.42);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 28px 55px rgba(31,20,66,.28);
+      transform: perspective(1200px) rotateY(-2deg) rotateX(1deg);
+    }
+
+    .cover-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(255,255,255,.20), transparent 26%, transparent 70%, rgba(71,45,124,.16));
+      pointer-events: none;
+    }
+
+    .cover-wrap img {
       display: block;
       width: 100%;
-      height: auto;
       aspect-ratio: 16 / 9;
       object-fit: cover;
     }
 
-    .info {
-      text-align: right;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin: 0 0 12px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      font-size: clamp(14px, 2vw, 16px);
-      font-weight: 700;
-      background: var(--c3);
-      color: var(--c4);
-    }
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(28px, 5vw, 48px);
-      line-height: 1.25;
-      color: var(--c4);
-    }
-
-    .subtitle {
-      margin: 0 0 10px;
-      font-size: clamp(18px, 2.8vw, 25px);
-      line-height: 1.6;
-      font-weight: 700;
-      color: var(--c4);
-    }
-
-    .desc {
-      margin: 0 0 22px;
-      font-size: clamp(16px, 2.1vw, 19px);
-      line-height: 1.9;
-      color: var(--c4);
-    }
-
-    .btn {
-      width: 100%;
-      min-height: 56px;
-      display: inline-flex;
+    .mini-note {
+      margin: 15px 4px 0;
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 14px 20px;
-      border: 2px solid var(--c4);
-      border-radius: 16px;
-      text-decoration: none;
-      font-size: clamp(16px, 2.1vw, 19px);
-      font-weight: 800;
-      color: var(--c1);
-      background: linear-gradient(110deg, var(--c3), var(--c4));
-      box-shadow: 0 12px 26px rgba(71, 45, 124, 0.28);
-      transition: transform .2s ease, box-shadow .2s ease;
-      -webkit-tap-highlight-color: transparent;
+      gap: 8px;
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      text-align: center;
     }
 
-    .btn:hover { transform: translateY(-2px); }
-    .btn:active { transform: translateY(0); }
-    .btn:focus-visible { outline: 4px solid var(--c3); outline-offset: 4px; }
-
-    .btn svg {
-      width: 24px;
-      height: 24px;
-      flex: 0 0 24px;
-      fill: currentColor;
+    .mini-note svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.9;
     }
 
-    @media (max-width: 760px) {
-      body { padding: 12px; }
-      .content { grid-template-columns: 1fr; }
-      .info { text-align: center; }
-      .preview { order: -1; }
-      .shell { border-radius: 22px; }
+    @media (max-width: 860px) {
+      .page { width: min(100% - 22px, 720px); padding-block: 18px; }
+      .hero { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+      .visual { order: -1; }
+      .copy { text-align: center; padding-top: 6px; }
+      .badge { margin-inline: auto; }
+      .desc { margin-inline: auto; }
+      .open-btn { width: 100%; }
+      .cover-wrap { transform: none; }
     }
 
-    @media (max-width: 420px) {
-      .content { padding: 14px; gap: 16px; }
-      .btn { border-radius: 14px; min-height: 54px; }
+    @media (max-width: 480px) {
+      .page { width: calc(100% - 16px); padding-block: 8px; }
+      .hero { border-radius: 24px; padding: 10px; }
+      .copy { padding: 8px 8px 14px; }
+      .badge { margin-bottom: 12px; }
+      .subtitle { margin-top: 10px; }
+      .desc { margin-bottom: 18px; line-height: 1.75; }
+      .open-btn { min-height: 56px; border-radius: 16px; }
+      .cover-wrap { border-radius: 18px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .btn { transition: none; }
+      .open-btn { transition: none; }
     }
   </style>
 </head>
 <body>
-  <main class="shell" aria-labelledby="page-title">
-    <div class="accent" aria-hidden="true"></div>
-
-    <section class="content">
-      <figure class="preview">
-        <img src="cover.jpg" alt="غلاف روزنامة معسكر الموظف الشامل" width="1280" height="720">
-      </figure>
-
-      <div class="info">
-        <p class="eyebrow">النسخة الأولى · أغسطس 2026م</p>
+  <main class="page">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="copy">
+        <p class="badge">النسخة الأولى · أغسطس 2026م</p>
         <h1 id="page-title">روزنامة معسكر الموظف الشامل</h1>
-        <p class="subtitle">عرض متجاوب للجوال والآيباد والكمبيوتر</p>
-        <p class="desc">اضغط على الزر لفتح ملف الروزنامة واستعراضه من جهازك.</p>
+        <p class="subtitle">الروزنامة التدريبية في تجربة عرض أنيقة وواضحة</p>
+        <p class="desc">انقر على الزر أدناه للانتقال إلى صفحة الاستعراض، وسيظهر ملف الروزنامة مباشرة داخل الصفحة مع إمكانية تحميله من الأعلى.</p>
 
-        <a class="btn" href="bag.html" aria-label="فتح واستعراض روزنامة معسكر الموظف الشامل">
+        <a class="open-btn" href="bag.html" aria-label="فتح واستعراض روزنامة معسكر الموظف الشامل">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm0 16H5V5h14v14Zm-7-1h2v-7h3l-5-5-5 5h3v7h2Z"/>
+            <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/>
+            <circle cx="12" cy="12" r="2.8"/>
           </svg>
           <span>فتح واستعراض الروزنامة</span>
         </a>
+      </div>
+
+      <div class="visual">
+        <figure class="cover-wrap">
+          <img src="cover.jpg" alt="غلاف روزنامة معسكر الموظف الشامل" width="1280" height="720">
+        </figure>
+        <div class="mini-note" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg>
+          <span>متوافق مع الجوال والتابلت والكمبيوتر</span>
+        </div>
       </div>
     </section>
   </main>
