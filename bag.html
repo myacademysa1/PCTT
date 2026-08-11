@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#472D7C">
-  <title>استعراض الروزنامة</title>
+  <title>استعراض روزنامة معسكر الموظف الشامل</title>
 
   <style>
     :root {
@@ -18,11 +18,14 @@
     }
 
     * { box-sizing:border-box; }
-    html, body { width:100%; height:100%; margin:0; }
+    html { width:100%; height:100%; -webkit-text-size-adjust:100%; }
 
     body {
-      min-height:100vh;
-      min-height:100dvh;
+      width:100%;
+      height:100vh;
+      height:100svh;
+      height:100dvh;
+      margin:0;
       display:flex;
       flex-direction:column;
       overflow:hidden;
@@ -37,12 +40,15 @@
       flex:0 0 auto;
       position:relative;
       z-index:10;
-      min-height:78px;
-      padding:12px clamp(14px,3vw,34px);
+      padding:
+        max(10px, env(safe-area-inset-top))
+        max(14px, env(safe-area-inset-right))
+        10px
+        max(14px, env(safe-area-inset-left));
       display:grid;
-      grid-template-columns:auto 1fr;
+      grid-template-columns:auto minmax(0,1fr);
       align-items:center;
-      gap:16px;
+      gap:14px;
       border-bottom:1px solid var(--line);
       background:linear-gradient(105deg, rgba(100,182,135,.76), rgba(39,143,150,.80) 58%, rgba(71,45,124,.90));
       box-shadow:var(--shadow);
@@ -52,33 +58,48 @@
 
     .title-wrap {
       min-width:0;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:10px;
       text-align:right;
     }
 
+    .header-logo {
+      width:42px;
+      height:42px;
+      flex:0 0 42px;
+      object-fit:contain;
+      filter:drop-shadow(0 5px 12px rgba(18,18,54,.18));
+    }
+
+    .title-box { min-width:0; }
+
     .title {
       margin:0;
-      font-size:clamp(18px,2vw,23px);
+      font-size:clamp(17px,2vw,22px);
       font-weight:900;
       line-height:1.35;
       color:#fff;
+      text-wrap:balance;
     }
 
     .subtitle {
-      margin:4px 0 0;
+      margin:3px 0 0;
       font-size:12px;
       font-weight:700;
       color:rgba(255,255,255,.72);
     }
 
     .download-btn {
-      min-height:50px;
+      min-height:48px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:9px;
-      padding:11px 17px;
+      padding:10px 16px;
       border:1px solid rgba(255,255,255,.50);
-      border-radius:16px;
+      border-radius:15px;
       color:#fff;
       text-decoration:none;
       font-size:14px;
@@ -87,6 +108,8 @@
       background:linear-gradient(110deg, rgba(255,255,255,.20), rgba(71,45,124,.44));
       box-shadow:0 10px 26px rgba(28,18,66,.20), inset 0 1px 0 rgba(255,255,255,.25);
       transition:transform .2s ease, background .2s ease;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
     }
 
     .download-btn:hover {
@@ -95,8 +118,9 @@
     }
 
     .download-btn svg {
-      width:22px;
-      height:22px;
+      width:21px;
+      height:21px;
+      flex:0 0 21px;
       fill:none;
       stroke:currentColor;
       stroke-width:2;
@@ -107,7 +131,11 @@
     .viewer-shell {
       flex:1 1 auto;
       min-height:0;
-      padding:clamp(8px,1.2vw,14px);
+      padding:
+        clamp(7px,1.1vw,12px)
+        max(clamp(7px,1.1vw,12px), env(safe-area-inset-right))
+        max(clamp(7px,1.1vw,12px), env(safe-area-inset-bottom))
+        max(clamp(7px,1.1vw,12px), env(safe-area-inset-left));
       display:flex;
     }
 
@@ -119,7 +147,7 @@
       overflow:hidden;
       display:flex;
       border:1px solid rgba(255,255,255,.38);
-      border-radius:22px;
+      border-radius:20px;
       background:#fff;
       box-shadow:0 22px 54px rgba(28,18,66,.30);
     }
@@ -176,18 +204,19 @@
 
     .fallback {
       position:absolute;
-      left:14px;
-      right:14px;
-      bottom:14px;
+      left:12px;
+      right:12px;
+      bottom:12px;
       z-index:4;
       display:none;
-      padding:11px 14px;
+      padding:10px 12px;
       border:1px solid rgba(255,255,255,.46);
-      border-radius:14px;
+      border-radius:13px;
       background:rgba(71,45,124,.94);
       color:#fff;
       text-align:center;
-      font-size:13px;
+      font-size:12px;
+      line-height:1.6;
       font-weight:700;
       box-shadow:0 12px 28px rgba(28,18,66,.22);
     }
@@ -196,15 +225,43 @@
 
     @media (max-width:680px) {
       .topbar {
-        min-height:auto;
         grid-template-columns:1fr;
-        gap:9px;
-        padding:9px 10px;
+        gap:8px;
+        padding-top:max(8px, env(safe-area-inset-top));
+        padding-right:max(10px, env(safe-area-inset-right));
+        padding-left:max(10px, env(safe-area-inset-left));
+        padding-bottom:8px;
       }
-      .title-wrap { text-align:center; }
-      .download-btn { width:100%; min-height:46px; border-radius:14px; }
-      .viewer-shell { padding:6px; }
-      .viewer-card { border-radius:14px; }
+
+      .title-wrap { justify-content:center; text-align:center; }
+      .header-logo { width:34px; height:34px; flex-basis:34px; }
+      .title { font-size:16px; }
+      .subtitle { font-size:11px; }
+      .download-btn { width:100%; min-height:44px; border-radius:13px; font-size:13px; }
+      .viewer-shell { padding-top:6px; }
+      .viewer-card { border-radius:13px; }
+    }
+
+    @media (max-width:430px) {
+      .title-wrap { gap:7px; }
+      .title { font-size:15px; }
+      .subtitle { font-size:10.5px; }
+      .download-btn { min-height:42px; }
+      .viewer-shell { padding-left:max(5px, env(safe-area-inset-left)); padding-right:max(5px, env(safe-area-inset-right)); }
+    }
+
+    @media (orientation:landscape) and (max-height:560px) {
+      .topbar {
+        grid-template-columns:auto minmax(0,1fr);
+        padding-top:max(6px, env(safe-area-inset-top));
+        padding-bottom:6px;
+      }
+      .title-wrap { justify-content:flex-start; text-align:right; }
+      .header-logo { width:32px; height:32px; flex-basis:32px; }
+      .title { font-size:15px; }
+      .subtitle { display:none; }
+      .download-btn { width:auto; min-height:40px; }
+      .viewer-shell { padding-top:5px; }
     }
 
     @media (prefers-reduced-motion:reduce) {
@@ -215,7 +272,7 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="download-btn" href="PCTT.Training.4th.Cohort.2026.pdf" download="PCTT.Training.4th.Cohort.2026.pdf" aria-label="تحميل الروزنامة">
+    <a class="download-btn" href="PCTT.Training.4th.Cohort.2026.pdf" download="PCTT.Training.4th.Cohort.2026.pdf" aria-label="تحميل روزنامة معسكر الموظف الشامل">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M12 3v12"/>
         <path d="m7.5 10.5 4.5 4.5 4.5-4.5"/>
@@ -225,13 +282,16 @@
     </a>
 
     <div class="title-wrap">
-      <h1 class="title">الروزنامة</h1>
-      <p class="subtitle">النسخة الأولى · أغسطس 2026م</p>
+      <img class="header-logo" src="https://up6.cc/2026/08/178645342757681.png" alt="شعار معسكر الموظف الشامل" loading="eager" referrerpolicy="no-referrer">
+      <div class="title-box">
+        <h1 class="title">روزنامة معسكر الموظف الشامل</h1>
+        <p class="subtitle">النسخة الأولى · أغسطس 2026م</p>
+      </div>
     </div>
   </header>
 
   <main class="viewer-shell">
-    <section class="viewer-card" aria-label="عارض الروزنامة">
+    <section class="viewer-card" aria-label="عارض روزنامة معسكر الموظف الشامل">
       <div id="loading" class="loading" aria-live="polite">
         <div class="loader-box">
           <div class="spinner" aria-hidden="true"></div>
@@ -241,8 +301,7 @@
 
       <iframe
         id="pdfViewer"
-        title="استعراض ملف الروزنامة"
-        src="PCTT.Training.4th.Cohort.2026.pdf#page=1&view=Fit&toolbar=1&navpanes=0&scrollbar=1"
+        title="استعراض ملف روزنامة معسكر الموظف الشامل"
         allow="fullscreen"
       ></iframe>
 
@@ -254,10 +313,25 @@
 
   <script>
     (() => {
+      const PDF_FILE = 'PCTT.Training.4th.Cohort.2026.pdf';
       const viewer = document.getElementById('pdfViewer');
       const loading = document.getElementById('loading');
       const fallback = document.getElementById('fallback');
       let loaded = false;
+
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+      const pdfUrl = isHttp ? new URL(PDF_FILE, location.href).href : PDF_FILE;
+
+      // على iPhone/iPad نستخدم عارض Google داخل الصفحة لثبات أفضل،
+      // وعلى بقية الأجهزة نستخدم عارض PDF المدمج في المتصفح.
+      if (isIOS && isHttp) {
+        viewer.src = 'https://docs.google.com/gview?embedded=1&url=' + encodeURIComponent(pdfUrl);
+      } else {
+        viewer.src = pdfUrl + '#page=1&view=Fit&toolbar=1&navpanes=0&scrollbar=1';
+      }
 
       const finish = () => {
         loaded = true;
@@ -271,7 +345,7 @@
           loading.classList.add('hidden');
           fallback.style.display = 'block';
         }
-      }, 9000);
+      }, 12000);
     })();
   </script>
 </body>
