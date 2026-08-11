@@ -152,14 +152,62 @@
       box-shadow:0 22px 54px rgba(28,18,66,.30);
     }
 
-    iframe {
-      display:block;
+    .pdf-scroll {
+      position:relative;
       flex:1 1 auto;
-      width:100%;
-      height:100%;
+      min-width:0;
       min-height:0;
-      border:0;
+      overflow:auto;
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
+      background:#eef1f5;
+      scrollbar-gutter:stable;
+    }
+
+    .pdf-pages {
+      width:100%;
+      min-height:100%;
+      padding:10px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+    }
+
+    .pdf-page {
+      width:min(100%, 1100px);
+      min-height:120px;
+      display:flex;
+      justify-content:center;
       background:#fff;
+      border-radius:8px;
+      overflow:hidden;
+      box-shadow:0 4px 14px rgba(28,18,66,.10);
+    }
+
+    .pdf-page canvas {
+      display:block;
+      max-width:100%;
+      height:auto;
+      background:#fff;
+    }
+
+    .page-indicator {
+      position:absolute;
+      z-index:5;
+      left:50%;
+      bottom:10px;
+      transform:translateX(-50%);
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(71,45,124,.88);
+      color:#fff;
+      font-size:11px;
+      font-weight:800;
+      pointer-events:none;
+      box-shadow:0 8px 20px rgba(28,18,66,.18);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
     }
 
     .loading {
@@ -299,11 +347,10 @@
         </div>
       </div>
 
-      <iframe
-        id="pdfViewer"
-        title="استعراض ملف روزنامة معسكر الموظف الشامل"
-        allow="fullscreen"
-      ></iframe>
+      <div id="pdfScroll" class="pdf-scroll" role="document" aria-label="استعراض ملف روزنامة معسكر الموظف الشامل">
+        <div id="pdfPages" class="pdf-pages"></div>
+      </div>
+      <div id="pageIndicator" class="page-indicator" hidden>الصفحة 1</div>
 
       <div id="fallback" class="fallback">
         إذا لم يظهر الملف داخل الصفحة، يمكنك تحميله من زر «تحميل الروزنامة» بالأعلى.
@@ -311,41 +358,148 @@
     </section>
   </main>
 
-  <script>
+  <script type="module">
+    import * as pdfjsLib from 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.min.mjs';
+
     (() => {
       const PDF_FILE = 'PCTT.Training.4th.Cohort.2026.pdf';
-      const viewer = document.getElementById('pdfViewer');
+      const PDF_WORKER = 'https://unpkg.com/pdfjs-dist@6.1.200/build/pdf.worker.min.mjs';
+      const pdfScroll = document.getElementById('pdfScroll');
+      const pdfPages = document.getElementById('pdfPages');
       const loading = document.getElementById('loading');
+      const loaderText = document.querySelector('.loader-text');
       const fallback = document.getElementById('fallback');
-      let loaded = false;
+      const pageIndicator = document.getElementById('pageIndicator');
 
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER;
 
-      const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
-      const pdfUrl = isHttp ? new URL(PDF_FILE, location.href).href : PDF_FILE;
+      let pdfDoc = null;
+      let nextPage = 1;
+      let rendering = false;
+      let firstPageShown = false;
+      const rendered = new Set();
 
-      // على iPhone/iPad نستخدم عارض Google داخل الصفحة لثبات أفضل،
-      // وعلى بقية الأجهزة نستخدم عارض PDF المدمج في المتصفح.
-      if (isIOS && isHttp) {
-        viewer.src = 'https://docs.google.com/gview?embedded=1&url=' + encodeURIComponent(pdfUrl);
-      } else {
-        viewer.src = pdfUrl + '#page=1&view=Fit&toolbar=1&navpanes=0&scrollbar=1';
-      }
+      const isMobile = matchMedia('(max-width: 680px)').matches;
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 1.75);
 
-      const finish = () => {
-        loaded = true;
+      const showFallback = (message) => {
         loading.classList.add('hidden');
+        fallback.textContent = message || 'تعذّر عرض الملف داخل الصفحة. يمكنك تحميله من زر «تحميل الروزنامة» بالأعلى.';
+        fallback.style.display = 'block';
       };
 
-      viewer.addEventListener('load', finish, { once:true });
-
-      setTimeout(() => {
-        if (!loaded) {
-          loading.classList.add('hidden');
-          fallback.style.display = 'block';
+      const updateIndicator = () => {
+        if (!pdfDoc) return;
+        const pages = [...pdfPages.querySelectorAll('.pdf-page')];
+        if (!pages.length) return;
+        const viewportTop = pdfScroll.scrollTop + 20;
+        let current = 1;
+        for (const el of pages) {
+          if (el.offsetTop <= viewportTop + pdfScroll.clientHeight * 0.35) {
+            current = Number(el.dataset.page || current);
+          }
         }
-      }, 12000);
+        pageIndicator.textContent = `الصفحة ${current} من ${pdfDoc.numPages}`;
+      };
+
+      const renderPage = async (pageNumber) => {
+        if (!pdfDoc || rendered.has(pageNumber)) return;
+        rendered.add(pageNumber);
+
+        const page = await pdfDoc.getPage(pageNumber);
+        const baseViewport = page.getViewport({ scale: 1 });
+        const availableWidth = Math.max(280, Math.min(pdfScroll.clientWidth - 20, 1100));
+        const cssScale = availableWidth / baseViewport.width;
+        const viewport = page.getViewport({ scale: cssScale * pixelRatio });
+
+        const pageBox = document.createElement('div');
+        pageBox.className = 'pdf-page';
+        pageBox.dataset.page = String(pageNumber);
+        pageBox.setAttribute('aria-label', `الصفحة ${pageNumber}`);
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        canvas.style.width = `${Math.floor(viewport.width / pixelRatio)}px`;
+        canvas.style.height = `${Math.floor(viewport.height / pixelRatio)}px`;
+        pageBox.appendChild(canvas);
+        pdfPages.appendChild(pageBox);
+
+        await page.render({ canvasContext: ctx, viewport }).promise;
+        page.cleanup();
+
+        if (!firstPageShown) {
+          firstPageShown = true;
+          loading.classList.add('hidden');
+          pageIndicator.hidden = false;
+          updateIndicator();
+        }
+      };
+
+      const renderNextBatch = async () => {
+        if (!pdfDoc || rendering || nextPage > pdfDoc.numPages) return;
+        rendering = true;
+        try {
+          const batchSize = isMobile ? 1 : 2;
+          const last = Math.min(pdfDoc.numPages, nextPage + batchSize - 1);
+          for (; nextPage <= last; nextPage += 1) {
+            await renderPage(nextPage);
+          }
+        } finally {
+          rendering = false;
+        }
+      };
+
+      const maybeLoadMore = () => {
+        updateIndicator();
+        const remaining = pdfScroll.scrollHeight - pdfScroll.scrollTop - pdfScroll.clientHeight;
+        if (remaining < Math.max(700, pdfScroll.clientHeight * 1.25)) {
+          renderNextBatch().catch(() => showFallback());
+        }
+      };
+
+      const start = async () => {
+        try {
+          const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+          if (!isHttp) {
+            showFallback('للعرض السريع افتحي هذه الصفحة من الموقع المنشور، وليس مباشرة من ملف HTML على الجهاز.');
+            return;
+          }
+
+          const pdfUrl = new URL(PDF_FILE, location.href).href;
+          const loadingTask = pdfjsLib.getDocument({
+            url: pdfUrl,
+            rangeChunkSize: 65536,
+            disableRange: false,
+            disableStream: false,
+            disableAutoFetch: false
+          });
+
+          loadingTask.onProgress = ({ loaded, total }) => {
+            if (loaderText && total) {
+              const pct = Math.max(1, Math.min(99, Math.round((loaded / total) * 100)));
+              loaderText.textContent = `جارٍ فتح الروزنامة… ${pct}%`;
+            }
+          };
+
+          pdfDoc = await loadingTask.promise;
+          await renderNextBatch();
+
+          const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 250));
+          idle(() => {
+            if (nextPage <= pdfDoc.numPages) renderNextBatch().catch(() => {});
+          });
+        } catch (error) {
+          console.error('PDF viewer error:', error);
+          showFallback();
+        }
+      };
+
+      pdfScroll.addEventListener('scroll', maybeLoadMore, { passive: true });
+      window.addEventListener('resize', updateIndicator, { passive: true });
+
+      start();
     })();
   </script>
 </body>
